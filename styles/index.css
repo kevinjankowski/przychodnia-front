@@ -76,6 +76,10 @@ main{
 #pick-date{
     margin-left: 5px;
 }
+
+#pick-hour{
+    margin: 5px 5px 5px;
+}
 /* STOPKA */
 
 footer{

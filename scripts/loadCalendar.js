@@ -3,9 +3,12 @@ import {apiQuery} from './apiQuery.js';
 
 // Zmienne
 const leftSide = document.getElementById('left-side');
-let hours = [];
+let allHours = [];
 let busyHours = [];
-let selectedDate = null;
+let freeHours = [];
+
+let selectedDate = "";
+let selectedHour = "";
 
 // Funkcje
 
@@ -18,7 +21,7 @@ function getAllHours(){
     return apiQuery(endpoint)
         .then(result => {
             result.forEach(item => {
-                hours.push(item.hour);
+                allHours.push(item.hour);
             })
         })
         .catch((error) => {});
@@ -27,6 +30,9 @@ function getAllHours(){
 /*  Funkcja getBusyHours zwraca wszystkie godziny, w których ktoś w określonym dniu zarezerwował wizytę u danego lekarza.
 *   Takich rekordów może być więcej niż jeden. Rekordy są dodawane po kolei do tablicy busyHours */
 function getBusyHours(doctor_id, visit_date){
+
+    // Wyczyszczenie tablicy z godzinami.
+    busyHours = [];
 
     // Zmienne potrzebne funckji apiQuery
     const endpoint = "busyAppointments";
@@ -42,68 +48,123 @@ function getBusyHours(doctor_id, visit_date){
 }
 
 /* Poniższa funkcja tworzy element typu input date, który pozwala wybrać datę począwszy od dzisiaj */
-function createDatePicker(doc_first_name, doc_last_name) {
-    return new Promise((resolve, reject) => {
-        // Sprawdzenie, czy istnieje już jakiś date picker i usunięcie go
-        const existingContainer = document.getElementById('date-picker-container');
-        if (existingContainer) {
-            existingContainer.remove();
+function createDatePicker(doctor_id, doc_first_name, doc_last_name) {
+    // Sprawdzenie, czy istnieje już jakiś date picker i usunięcie go
+    const existingContainer = document.getElementById('date-picker-container');
+    if (existingContainer) {
+        existingContainer.remove();
+    }
+
+    // Tworzenie elementów HTML
+    const pickDateText = document.createElement('p');
+    pickDateText.id = "pick-date-text";
+    pickDateText.textContent = `Wybierz datę, aby zobaczyć dostępne godziny u ${doc_first_name} ${doc_last_name}:`;
+
+    const container = document.createElement('div');
+    container.id = "date-picker-container";
+
+    // Tworzenie elementu typu input date
+    const datePicker = document.createElement('input');
+    datePicker.type = 'date';
+    datePicker.id = 'date-picker';
+
+    // Ustawienie minimalnej daty na dzisiejszą
+    datePicker.min = new Date().toISOString().split('T')[0];
+
+    // Tworzenie przycisku
+    const pickButton = document.createElement('button');
+    pickButton.id = 'pick-date';
+    pickButton.textContent = 'Wybierz';
+
+    // Dodanie elementów do kontenera
+    container.appendChild(pickDateText);
+    container.appendChild(datePicker);
+    container.appendChild(pickButton);
+
+    // Dodanie kontenera do dokumentu
+    leftSide.appendChild(container);
+
+    // Obsługa kliknięcia przycisku
+    pickButton.addEventListener('click', async function () {
+        selectedDate = datePicker.value;
+        freeHours = [];
+
+        if (!selectedDate) {
+            selectedDate = new Date().toISOString().split('T')[0]
         }
 
-        // Tworzenie elementów HTML
-        const pickDateText = document.createElement('p');
-        pickDateText.id = "pick-date-text";
-        pickDateText.textContent = `Wybierz datę, aby zobaczyć dostępne godziny u ${doc_first_name} ${doc_last_name}:`;
+        // Pobranie zajętych godzin w podanej dacie.
+        await getBusyHours(doctor_id, selectedDate);
 
-        const container = document.createElement('div');
-        container.id = "date-picker-container";
+        // Wyodrębnienie wolnych godzin danego lekarza w danym dniu.
+        allHours.forEach(hour => {
+            if(!busyHours.includes(hour)){
+                freeHours.push(hour);
+            }
+        })
 
-        // Tworzenie elementu typu input date
-        const datePicker = document.createElement('input');
-        datePicker.type = 'date';
-        datePicker.id = 'date-picker';
+        // Utworzenie przycisków z dostępnymi godzinami
+        createHourPicker();
+    });
+}
 
-        // Ustawienie minimalnej daty na dzisiejszą
-        datePicker.min = new Date().toISOString().split('T')[0];
+function createHourPicker(){
+    // Sprawdzenie, czy istnieje już jakiś hour picker i usunięcie go
+    const existingContainer = document.getElementById("hour-picker-container");
+    if (existingContainer) {
+        existingContainer.remove();
+    }
 
-        // Tworzenie przycisku
-        const pickButton = document.createElement('button');
-        pickButton.id = 'pick-date';
-        pickButton.textContent = 'Wybierz';
+    // Tworzenie elementów HTML
+    const pickHourText = document.createElement('p');
+    pickHourText.id = "pick-hour-text";
+    pickHourText.textContent = `Wybierz dostępną godzinę: `;
 
-        // Dodanie elementu do kontenera
-        container.appendChild(pickDateText);
-        container.appendChild(datePicker);
-        container.appendChild(pickButton);
+    const container = document.createElement('div');
+    container.id = "hour-picker-container";
 
-        // Dodanie kontenera do dokumentu
-        leftSide.appendChild(container);
+    // Tworzenie guzików do poszczególnych godzin
+    freeHours.forEach(hour => {
+        const pickHour = document.createElement('button');
+        pickHour.id = "pick-hour";
+        pickHour.textContent = hour;
+        container.appendChild(pickHour);
 
         // Obsługa kliknięcia przycisku
-        pickButton.addEventListener('click', function () {
-            const selectedDate = datePicker.value;
+        pickHour.addEventListener('click', function () {
 
-            if (selectedDate) {
-                resolve(selectedDate); // Rozwiązanie obietnicy z wybraną datą
-            } else {
-                // Jeśli nie wybrano daty, wysyłana jest dzisiejsza
-                resolve(new Date().toISOString().split('T')[0])
-            }
-        });
-    });
+            // Przypisanie do zmiennej globalnej wartości naciśniętego przycisku
+            selectedHour = hour;
+
+            // Zmiana kolorów przucisków na białe
+            const allButtons = container.querySelectorAll('button');
+            allButtons.forEach(button => {
+                button.style.color = "black"; // Domyślny kolor
+            });
+
+            // Zmiana koloru naciśniętego przycisku na zielony
+            pickHour.style.color = "green";
+        })
+    })
+
+
+
+
+    // Dodanie elementów do kontenera
+    leftSide.appendChild(pickHourText);
+    leftSide.appendChild(container);
 }
 
 export async function loadCalendar(doctor_id, doc_first_name, doc_last_name) {
 
     try{
-        // Tworzenie kalendarza i pobranie daty od użytkownika
-        selectedDate = await createDatePicker(doc_first_name, doc_last_name);
-
         // Pobranie wszystkich godzin z bazy danych
         await getAllHours()
 
-        // Pobranie zajętych godzin w podanej dacie
-        await getBusyHours(doctor_id, selectedDate);
+        // Tworzenie kalendarza i pobranie daty od użytkownika
+        createDatePicker(doctor_id, doc_first_name, doc_last_name);
+
+
 
     }catch(error){
         console.error("Błąd pobierania danych:", error.message);
