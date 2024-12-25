@@ -1,5 +1,6 @@
 // Importy
 import { apiQuery } from './apiQuery.js';
+import { loadCalendar } from './loadCalendar.js';
 
 // Zmienne
 const submitButton = document.getElementById("submit");
@@ -13,6 +14,7 @@ const  listText  = document.getElementById("list-text");
 function doctorElement(doctor) {
     const doctorDiv = document.createElement("div");
     doctorDiv.id = "doctor-div";
+    doctorDiv.addEventListener("click", loadCalendar);
 
     // Stworzenie nagłówka imienia i nazwiska
     const doctorName = document.createElement("h4");
