@@ -21,8 +21,8 @@ function loadSpecializations(listContainer, specialization) {
 /*  Poniższy fragment wywołuje zaimportowaną funkcję apiQuery,
 *   która pobiera z bazy danych listę wszystkich specjalizacji */
 apiQuery(endpoint)
-    .then((data) => {
-        data.forEach((item) => {
+    .then((result) => {
+        result.forEach((item) => {
             // Wywołanie funkcji, który dodaje nazwę specjalizacji (item) do rozwijanej lity typu <select>
             loadSpecializations(specializationsList, item);
         })

@@ -14,7 +14,11 @@ const  listText  = document.getElementById("list-text");
 function doctorElement(doctor) {
     const doctorDiv = document.createElement("div");
     doctorDiv.id = "doctor-div";
-    doctorDiv.addEventListener("click", loadCalendar);
+
+    // Wywołanie funkcji loadCalendar, która uruchamia listę dostępnych terminów dla danego lekarza
+    doctorDiv.addEventListener("click", function() {
+        loadCalendar(doctor.doctor_id).then(r => {});
+    });
 
     // Stworzenie nagłówka imienia i nazwiska
     const doctorName = document.createElement("h4");
@@ -41,8 +45,8 @@ function loadDoctors(selectedSpecialization) {
     const params = {specialization: selectedSpecialization};
 
     apiQuery(endpoint, params)
-        .then((data) => {
-            data.forEach((item) => {
+        .then((result) => {
+            result.forEach((item) => {
                 // Wywołanie funckji, która dodaje kafelek z danymi lekarza podanego w patametrze
                 doctorElement(item)
             })
