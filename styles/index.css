@@ -1,0 +1,83 @@
+body{
+    height: 100vh;
+    font-family: "Raleway", serif;
+}
+
+/* NAGŁÓWEK */
+header{
+    height: 15vh;
+    background-color: #00ffb1;
+    font-size: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#header-name{
+    margin-left: 20px;
+}
+
+/* SEKCJA GŁÓWNA */
+
+main{
+    height: 70vh;
+    background-color: aquamarine;
+    padding: 5vh;
+}
+
+#left-side{
+    width: 50%;
+    height: 100%;
+    float: left;
+}
+
+#right-side{
+    width: 50%;
+    height: 100%;
+    float: right;
+}
+
+#chose-text{
+    margin: 0 0 10px;
+    padding-top: 10px;
+}
+
+#chose-specialization{
+    width: 100%;
+}
+
+#list-of-doctors{
+    text-align: center;
+    display: flex;
+    scrollbar-width: thin;
+    align-items: center;        /* Wyśrodkowanie poziome flex-direction: row;        /* Elementy w rzędzie */
+    justify-content: center;   /* Wyśrodkowanie pionowe */
+    overflow-x: auto;
+    flex-wrap: nowrap;
+}
+
+#list-text{
+    margin: 0 0 10px;
+    padding-top: 10px;
+    display: none;
+}
+
+#doctor-div{
+    flex: 0 0 auto;
+    width: 30%;
+    margin: 0 5px 0;
+    background-color: #d1ffef;
+    border: 2px solid white;
+    display: inline-block;
+}
+
+/* STOPKA */
+
+footer{
+    height: 10vh;
+    background-color: #00ffb1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
