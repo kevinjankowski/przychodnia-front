@@ -5,7 +5,7 @@
 *   2. Parametry (np.: doctorId: 123)
 *
 *   Ostatecznie funckja będzie wyglądać następująco:
-*   apiQuery("doctorsBySpec", { specialization: "Cardiologist" })
+*   apiQuery("doctorsBySpec", { specialization: "Kardiolog })
 *
 *   ! Jeśli jakiś endpoint (np. doctors) nie ma paremtrów, nie trzeba ich podawać !
 *
