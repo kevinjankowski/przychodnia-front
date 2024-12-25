@@ -41,8 +41,7 @@ export function apiQuery(endpoint, params = {}) {
                     }
                 } else {
                     // Jeśli dane nie zostały załadowane, wyświetlany jest alert z odpowiednią informacją
-                    alert(JSON.parse(xhr.responseText).message);
-                    reject(new Error("Błąd pobierania danych: " + xhr.status));
+                    reject(JSON.parse(xhr.responseText));
                 }
             }
         };

@@ -17,7 +17,7 @@ function doctorElement(doctor) {
 
     // Wywołanie funkcji loadCalendar, która uruchamia listę dostępnych terminów dla danego lekarza
     doctorDiv.addEventListener("click", function() {
-        loadCalendar(doctor.doctor_id).then(r => {});
+        loadCalendar(doctor.doctor_id, doctor.first_name, doctor.last_name).then(r => {});
     });
 
     // Stworzenie nagłówka imienia i nazwiska
@@ -52,6 +52,7 @@ function loadDoctors(selectedSpecialization) {
             })
         })
         .catch((error) => {
+            alert(error.message);
             console.error("Błąd podczas pobierania lekarzy:", error.message);
         })
 }

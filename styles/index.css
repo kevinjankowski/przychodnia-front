@@ -69,6 +69,13 @@ main{
     display: inline-block;
 }
 
+#date-picker-container{
+    margin: 5px 0 5px;
+}
+
+#pick-date{
+    margin-left: 5px;
+}
 /* STOPKA */
 
 footer{
