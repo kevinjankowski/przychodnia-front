@@ -50,8 +50,6 @@ main{
     text-align: center;
     display: flex;
     scrollbar-width: thin;
-    align-items: center;        /* Wyśrodkowanie poziome flex-direction: row;        /* Elementy w rzędzie */
-    justify-content: center;   /* Wyśrodkowanie pionowe */
     overflow-x: auto;
     flex-wrap: nowrap;
 }
