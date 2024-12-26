@@ -1,5 +1,5 @@
 // Importy
-import { apiQuery } from './apiQuery.js';
+import { apiQueryGET } from './apiQuery.js';
 import { loadCalendar } from './loadCalendar.js';
 
 // Zmienne
@@ -15,11 +15,6 @@ function doctorElement(doctor) {
     const doctorDiv = document.createElement("div");
     doctorDiv.id = "doctor-div";
 
-    // Wywołanie funkcji loadCalendar, która uruchamia listę dostępnych terminów dla danego lekarza
-    doctorDiv.addEventListener("click", function() {
-        loadCalendar(doctor.doctor_id, doctor.first_name, doctor.last_name).then(r => {});
-    });
-
     // Stworzenie nagłówka imienia i nazwiska
     const doctorName = document.createElement("h4");
     doctorName.textContent = `${doctor.first_name} ${doctor.last_name}`;
@@ -34,6 +29,11 @@ function doctorElement(doctor) {
 
     // Dodanie kafelka do kontenera list-of-doctors
     listOfDoctors.appendChild(doctorDiv);
+
+    // Wywołanie funkcji loadCalendar, która uruchamia listę dostępnych terminów dla danego lekarza
+    doctorDiv.addEventListener("click", function() {
+        loadCalendar(doctor.doctor_id, doctor.first_name, doctor.last_name).then(r => {});
+    });
 }
 
 /*  Poniższa funkcja wywołuje zaimportowaną funkcję apiQuery, która pobiera z bazy danych wszystkich lekarzy
@@ -44,7 +44,7 @@ function loadDoctors(selectedSpecialization) {
     const endpoint = "doctorsBySpec";
     const params = {specialization: selectedSpecialization};
 
-    apiQuery(endpoint, params)
+    apiQueryGET(endpoint, params)
         .then((result) => {
             result.forEach((item) => {
                 // Wywołanie funckji, która dodaje kafelek z danymi lekarza podanego w patametrze
@@ -52,8 +52,8 @@ function loadDoctors(selectedSpecialization) {
             })
         })
         .catch((error) => {
+            listText.style.display = "none";
             alert(error.message);
-            console.error("Błąd podczas pobierania lekarzy:", error.message);
         })
 }
 
@@ -63,6 +63,13 @@ function loadDoctors(selectedSpecialization) {
 *   Po naciśnięciu guzika wywoływana jest funkcja loadDoctors */
 submitButton.addEventListener("click", function () {
 
+    const existingDatePicker = document.getElementById('date-picker-container');
+    const existingHourPicker = document.getElementById('hour-picker-container');
+
+    if (existingDatePicker || existingHourPicker) {
+        existingDatePicker.remove();
+        existingHourPicker.remove();
+    }
     // Odkrycie napisu listText
     listText.style.display = "block";
 

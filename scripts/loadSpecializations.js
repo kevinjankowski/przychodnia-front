@@ -1,5 +1,5 @@
 // Importy
-import { apiQuery } from './apiQuery.js';
+import { apiQueryGET } from './apiQuery.js';
 
 // Zmienne
 const specializationsList = document.getElementById("specializations-list");
@@ -20,7 +20,7 @@ function loadSpecializations(listContainer, specialization) {
 
 /*  Poniższy fragment wywołuje zaimportowaną funkcję apiQuery,
 *   która pobiera z bazy danych listę wszystkich specjalizacji */
-apiQuery(endpoint)
+apiQueryGET(endpoint)
     .then((result) => {
         result.forEach((item) => {
             // Wywołanie funkcji, który dodaje nazwę specjalizacji (item) do rozwijanej lity typu <select>

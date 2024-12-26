@@ -25,20 +25,41 @@
 
             <p id="list-text">Wybierz jednego z poniższych lekarzy:</p>
             <div id="list-of-doctors"></div>
-
-            <script type="module" src="scripts/loadSpecializations.js"></script>
-            <script type="module" src="scripts/loadDoctors.js"></script>
         </section>
 
         <section id="right-side">
+            <div id="user-form">
+                <div class="form-group">
+                    <label for="pesel">PESEL:</label>
+                    <input type="text" id="pesel" name="pesel" placeholder="Wpisz PESEL">
+                </div>
+                <div class="form-group">
+                    <label for="first-name">Imię:</label>
+                    <input type="text" id="first-name" name="first-name" placeholder="Wpisz imię">
+                </div>
+                <div class="form-group">
+                    <label for="last-name">Nazwisko:</label>
+                    <input type="text" id="last-name" name="last-name" placeholder="Wpisz nazwisko">
+                </div>
+                <div class="form-group">
+                    <label for="note">Notatka dla lekarza:</label>
+                    <input type="text" id="note" name="note" placeholder="Wpisz notatkę (opcjionanie): ">
+                </div>
+                <button id="register-button">Zarejestruj</button>
+            </div>
 
         </section>
 
+        <section id="button-section">
+            <button id="go-to-personal">Przejdź dalej</button>
+        </section>
+
+
+        <script type="module" src="scripts/loadSpecializations.js"></script>
+        <script type="module" src="scripts/loadDoctors.js"></script>
     </main>
 
-    <footer>
-        Kevin Jankowski
-    </footer>
+    <footer></footer>
 
 
 

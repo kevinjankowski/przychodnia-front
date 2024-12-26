@@ -1,8 +1,11 @@
 // Importy
-import {apiQuery} from './apiQuery.js';
+import {apiQueryGET} from './apiQuery.js';
+import {personalData} from './personalData.js';
 
 // Zmienne
 const leftSide = document.getElementById('left-side');
+const goToPersonal = document.getElementById('go-to-personal');
+const userForm = document.getElementById('user-form');
 let allHours = [];
 let busyHours = [];
 let freeHours = [];
@@ -18,7 +21,7 @@ function getAllHours(){
     // Zmienne potrzebne funckji apiQuery
     const endpoint = "hours"
 
-    return apiQuery(endpoint)
+    return apiQueryGET(endpoint)
         .then(result => {
             result.forEach(item => {
                 allHours.push(item.hour);
@@ -38,7 +41,7 @@ function getBusyHours(doctor_id, visit_date){
     const endpoint = "busyAppointments";
     const params = {doctorId: doctor_id, date: visit_date};
 
-    return apiQuery(endpoint, params)
+    return apiQueryGET(endpoint, params)
         .then(result => {
             result.forEach(item => {
                 busyHours.push(item.hour);
@@ -86,8 +89,8 @@ function createDatePicker(doctor_id, doc_first_name, doc_last_name) {
 
     // Obsługa kliknięcia przycisku
     pickButton.addEventListener('click', async function () {
-        selectedDate = datePicker.value;
         freeHours = [];
+        selectedDate = datePicker.value;
 
         if (!selectedDate) {
             selectedDate = new Date().toISOString().split('T')[0]
@@ -122,6 +125,7 @@ function createHourPicker(){
 
     const container = document.createElement('div');
     container.id = "hour-picker-container";
+    container.appendChild(pickHourText);
 
     // Tworzenie guzików do poszczególnych godzin
     freeHours.forEach(hour => {
@@ -144,29 +148,44 @@ function createHourPicker(){
 
             // Zmiana koloru naciśniętego przycisku na zielony
             pickHour.style.color = "green";
+
+            // Kiedy wybrano datę i godzinę, pojawia się opcja przejścia dalej
+            goToPersonal.style.display = "block";
         })
     })
 
-
-
-
     // Dodanie elementów do kontenera
-    leftSide.appendChild(pickHourText);
     leftSide.appendChild(container);
 }
 
 export async function loadCalendar(doctor_id, doc_first_name, doc_last_name) {
 
     try{
+        // Czyszczenie tablic z godzinami
+        allHours = [];
+        busyHours = [];
+        freeHours = [];
+
+        // Sprawdzenie, czy istnieje już jakiś date picker i usunięcie go
+        const existingContainer = document.getElementById('hour-picker-container');
+        if (existingContainer) {
+            existingContainer.remove();
+        }
+
         // Pobranie wszystkich godzin z bazy danych
         await getAllHours()
 
         // Tworzenie kalendarza i pobranie daty od użytkownika
         createDatePicker(doctor_id, doc_first_name, doc_last_name);
 
+        goToPersonal.addEventListener('click', function () {
+            userForm.style.display = "block";
+            personalData(doctor_id, selectedDate, selectedHour);
+        })
 
 
     }catch(error){
         console.error("Błąd pobierania danych:", error.message);
     }
+
 }
