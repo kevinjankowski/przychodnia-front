@@ -34,18 +34,26 @@ export function registerVisit(doctor_id, selectedDate, selectedHour, patient_id,
             "note": note.toString(),
         };
 
-    /*apiQueryPOST(endpoint, data)
+    apiQueryPOST(endpoint, data)
         .then(response => {
             // Jeśli wizyta jest utworzona porawnie
             alert(`Wiadomość: ${response.message}`);
         })
         .catch((error) => {
             // Jeśli jest jakiś błąd:
-            alert(`Wiadomość: ${error.message}`);
+
+            if (error.status === 404) {
+                alert(`${error.message} \n We will add you to database now. Please click again register button`);
+                addPatient(patient_id, first_name, last_name);
+            } else {
+                alert(`Wiadomość: ${error.message}`);
+            }
+
+
 
             // Jeśli pacjenta nie ma w bazie danych zostaje automatycznie dodany a wizyta zarejestrowana
-        });*/
+        });
 
-    addPatient(patient_id, first_name, last_name);
+
 
 }
