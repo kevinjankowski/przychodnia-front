@@ -80,3 +80,6 @@ submitButton.addEventListener("click", function () {
     const selectedSpecialization = specializationList.value;
     loadDoctors(selectedSpecialization)
 })
+
+
+// Code created by Kevin Jankowski

@@ -57,3 +57,5 @@ export function registerVisit(doctor_id, selectedDate, selectedHour, patient_id,
 
 
 }
+
+// Code created by Kevin Jankowski

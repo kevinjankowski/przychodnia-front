@@ -189,3 +189,5 @@ export async function loadCalendar(doctor_id, doc_first_name, doc_last_name) {
     }
 
 }
+
+// Code created by Kevin Jankowski
